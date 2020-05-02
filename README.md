@@ -1,18 +1,20 @@
+```
 @author:	Michael Denzel
 @license:	GNU General Public License 2.0 or later
+```
 
 ------------------------------------------------
-1. Installation
-2. Quickstart
-3. Usage
- 3.1 dumpACPITables.py
- 3.2 scanACPITables.py
-4. Remarks
- 4.1 iasl
- 4.2 ACPIstructs.py
+# 1. Installation
+# 2. Quickstart
+# 3. Usage
+## 3.1 dumpACPITables.py
+## 3.2 scanACPITables.py
+# 4. Remarks
+## 4.1 iasl
+## 4.2 ACPIstructs.py
 
 ------------------------------------------------
-1. Installation
+# 1. Installation
 
 Just copy the three files
 - ACPIstructs.py ("header" file)
@@ -26,7 +28,7 @@ individually and just require the header-file ACPIstructs.py
 Alternatively, one can include '--plugins=.../ACPI-rootkit-scan' in the volatility command.
 
 ------------------------------------------------
-2. Quickstart
+# 2. Quickstart
 
 Simply execute:
 
@@ -40,8 +42,8 @@ If you only want to see certain detections, run:
 ```volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump --only_crit```
 
 ------------------------------------------------
-3. Usage
-3.1 dumpACPITables.py
+# 3. Usage
+## 3.1 dumpACPITables.py
 
 The plugin is able to extract the ACPI tables from a memory dump in raw and
 aml format (for description of the parameters see "-h" option in volatility).
@@ -75,8 +77,7 @@ $ tree ./dumpedTables
   `-- WAET.raw
 ```
 
-------------------------------------------------
-3.2 scanACPITables.py
+## 3.2 scanACPITables.py
 
 This plugin scans all .dsl (ACPI Source Language, ASL) files in a given path
 for possible malicious function calls. To alter the path to search for
@@ -163,8 +164,8 @@ WARNING : volatility.plugins.scanACPITables: 		      function-address 'MBAS (Arg
 ```
 
 ------------------------------------------------
-4. Remarks
-4.1 iasl
+# 4. Remarks
+## 4.1 iasl
 
 The aml-files can be decompiled into .dsl files with iasl, an official tool from ACPICA
 (could be found in the Fedora/Ubuntu repositories as 'acpica-tools' - date 2020-05-02):
@@ -176,8 +177,7 @@ e.g.
 The resulting <file.dsl> can be opened with a normal text-editor or scanned with
 the second plugin scanACPITables.py
 
-------------------------------------------------
-4.2 ACPIstructs.py
+## 4.2 ACPIstructs.py
 
 This file includes ACPI header structs to parse the ACPI tables.
 It can not be run separately but could be included in further modules which
