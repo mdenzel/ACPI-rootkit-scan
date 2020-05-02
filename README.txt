@@ -30,14 +30,14 @@ Alternatively, one can include '--plugins=.../ACPI-rootkit-scan' in the volatili
 
 Simply execute:
 
-`volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump`
+```volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump```
 
 The option 'dump' calls both modules with default option, i.e. it dumps the ACPI tables into the default
 folder, decompiles them with iasl, and scans the result for ACPI rootkits.
 
 If you only want to see certain detections, run:
 
-`volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump --only_crit`
+```volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump --only_crit```
 
 ------------------------------------------------
 3. Usage
@@ -51,6 +51,7 @@ are created for every base pointer (RSDP) found in the specified memory region.
 For example: ./dumpedTables/0x0009d510/ for an RSDP at 0x0009d510
 
 A dump could look like the following:
+```
 $ tree ./dumpedTables
   0x0009d510
   |-- APIC.raw
@@ -72,6 +73,7 @@ $ tree ./dumpedTables
   |-- MCFG.raw
   |-- SRAT.raw
   `-- WAET.raw
+```
 
 ------------------------------------------------
 3.2 scanACPITables.py
@@ -114,6 +116,7 @@ The result of a scan is evaluated in 4 Levels:
 
 Example output and explanation (comments after "#"):
 
+```
 $ python vol.py --profile=LinuxUbuntu1204_3_8_0_30x86 -f ./EVIL/Ubuntu_1204_3_8_0_30-generic_EVIL.vmem scanacpitables
 Volatile Systems Volatility Framework 2.3_beta
 
@@ -157,6 +160,7 @@ WARNING : volatility.plugins.scanACPITables: 		      function-address 'MBAS (Arg
 0x000f6b80/DSDT.dsl   Name (_HID, EisaId ("PNP0303"))                                        suspicious #two keyboard devices seem strange!
 0x000f6b80/DSDT.dsl   Name (_HID, EisaId ("PNP0303"))                                        suspicious #seems identical but is another line
 0x000f6b80/DSDT.dsl   OperationRegion (LPCS, SystemMemory, ECFG, 0x0500)                     seems ok
+```
 
 ------------------------------------------------
 4. Remarks
@@ -165,9 +169,9 @@ WARNING : volatility.plugins.scanACPITables: 		      function-address 'MBAS (Arg
 The aml-files can be decompiled into .dsl files with iasl, an official tool from ACPICA
 (could be found in the Fedora/Ubuntu repositories as 'acpica-tools' - date 2020-05-02):
 
-$ iasl -d <file.aml>
+```$ iasl -d <file.aml>```
 e.g.
-$ iasl -d ./dumpedTables/0x*/*.aml
+```$ iasl -d ./dumpedTables/0x*/*.aml```
 
 The resulting <file.dsl> can be opened with a normal text-editor or scanned with
 the second plugin scanACPITables.py
