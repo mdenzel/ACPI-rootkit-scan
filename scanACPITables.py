@@ -547,7 +547,16 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
 
         #call dumpACPITables if requested
         if(self._config.DUMP):
-            dumpACPITables.dumpACPITables(self._config).calculate()
+            debug.debug("Calling plugin dumpACPITables")
+            #dump all ACPI tables (calculate is a generator! thus call until StopIteration)
+            dumpACPImodule = dumpACPITables.dumpACPITables(self._config)
+            gen = dumpACPImodule.calculate()
+            while True:
+                try:
+                    gen.next()
+                except StopIteration:
+                    break
+            #end while
         #end if
         
         #init
@@ -597,7 +606,7 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
                             #yield all lines that are not "postrun"
                             #these can (in not broken dsl files)
                             #later be evaluated
-                            if(check != "postrun"):
+                            if(check != "postrun"): #TODO: only critical?
                                 yield statistic[index]
                             #end if
 

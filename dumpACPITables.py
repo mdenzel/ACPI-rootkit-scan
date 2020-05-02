@@ -13,7 +13,6 @@ import volatility.obj as obj
 import volatility.debug as debug
 #python
 import os as os
-import sys as sys
 import subprocess
 from distutils.spawn import find_executable
 #own modules
@@ -94,7 +93,8 @@ class dumpACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
         #check if "path" exists
         if(not os.path.isdir(self._config.PATH)):
             os.makedirs(self._config.PATH)
-
+        #end if
+        
     # ----- helpers -----
 
     #dump every SDT table    
@@ -448,9 +448,12 @@ class dumpACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
                     debug.debug("calling iasl")
                     #call iasl
                     #e.g.: iasl -d ./dumpedTables/0x*/*.aml
-                    subprocess.call(["iasl", "-d", self._config.PATH+"/0x*/*aml"],
-                                    stdout=sys.stdout,
-                                    stderr=sys.stderr)
+                    cmd = "iasl -d {}/0x*/*aml 2>/dev/null 1>/dev/null".format(self._config.PATH)
+                    p = subprocess.Popen(cmd, shell=True)
+                    p.communicate()
+                    if(p.returncode != 0):
+                        debug.error("iasl failed")
+                    #end if
                 else:
                     debug.error("iasl not found. Please install 'acpica-tools'.")
                 #end if
