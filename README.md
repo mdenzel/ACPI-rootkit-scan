@@ -4,30 +4,37 @@
 ```
 
 ------------------------------------------------
-# 1. Installation
-# 2. Quickstart
-# 3. Usage
-## 3.1 dumpACPITables.py
-## 3.2 scanACPITables.py
-# 4. Remarks
-## 4.1 iasl
-## 4.2 ACPIstructs.py
+
+```
+1. Installation
+2. Quickstart
+3. Usage
+ 3.1 dumpACPITables.py
+ 3.2 scanACPITables.py
+4. Remarks
+ 4.1 iasl
+ 4.2 ACPIstructs.py
+```
 
 ------------------------------------------------
+
 # 1. Installation
 
 Just copy the three files
+
 - ACPIstructs.py ("header" file)
 - dumpACPITables.py
 - scanACPITables.py
+
 to the plugin-folder of volatility (.../volatility/plugins).
 
 Both plugins (dumpACPITables.py and scanACPITables.py) can be installed and run
 individually and just require the header-file ACPIstructs.py
 
-Alternatively, one can include '--plugins=.../ACPI-rootkit-scan' in the volatility command.
+Alternatively, one can include `--plugins=.../ACPI-rootkit-scan` in the volatility command.
 
 ------------------------------------------------
+
 # 2. Quickstart
 
 Simply execute:
@@ -42,6 +49,7 @@ If you only want to see certain detections, run:
 ```volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump --only_crit```
 
 ------------------------------------------------
+
 # 3. Usage
 ## 3.1 dumpACPITables.py
 
@@ -92,6 +100,7 @@ This can be done with the official tool iasl. (see also 3.1)
 
 
 scanACPITables.py scans for a few functions that could be critical:
+
 - Load/LoadTable/Unload => can be used to load further malicious code from a memory location
   it could be useful to further investigate this memory location
 - IRQ1 => this is the keyboard interrupt. ACPI should not listen to this interrupt, if so
@@ -105,6 +114,7 @@ scanACPITables.py scans for a few functions that could be critical:
   in Windows for example - Tables that are often hooked by rootkits).
 
 The result of a scan is evaluated in 4 Levels:
+
 - "seems ok"	= the plugin could not find any hint to critical behaviour (this does not mean that there is none!)
 - "unknown"	= a special function call could not be evaluated. This could be due to arguments and parameters passed
 		  to the call. Since we are evaluating a memory image, these information are not available.
@@ -163,7 +173,9 @@ WARNING : volatility.plugins.scanACPITables: 		      function-address 'MBAS (Arg
 0x000f6b80/DSDT.dsl   OperationRegion (LPCS, SystemMemory, ECFG, 0x0500)                     seems ok
 ```
 
+
 ------------------------------------------------
+
 # 4. Remarks
 ## 4.1 iasl
 
