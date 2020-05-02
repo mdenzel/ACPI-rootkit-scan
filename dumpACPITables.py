@@ -13,6 +13,9 @@ import volatility.obj as obj
 import volatility.debug as debug
 #python
 import os as os
+import sys as sys
+import subprocess
+from distutils.spawn import find_executable
 #own modules
 import ACPIstructs
 
@@ -67,7 +70,7 @@ class dumpACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
                                 help = 'Just print base pointers RSDP without dumping the tables to files. (ignores all input options except START/END)',
                                 action = 'store_true')
         self._config.add_option('PATH', short_option = 'p', default = './dumpedTables',
-                                help = 'Path to folder to dump the ACPI tables.',
+                                help = 'Path to folder to dump the ACPI tables. (default: ./dumpedTables)',
                                 action = 'store', type = 'str')
         self._config.add_option('START', short_option = 's', default = None,
                                 help = 'Start of the scan for base pointer RSDP.\n' + 
@@ -78,6 +81,9 @@ class dumpACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
                                 help = 'End of the scan for base pointer RSDP', action = 'store', type = 'int')
         self._config.add_option('OVERWRITE', short_option = 'o', default = False,
                                 help = 'Overwrite existing files in PATH (option -p).',
+                                action = 'store_true')
+        self._config.add_option('NO_IASL', short_option = 'n', default = False,
+                                help = 'Do NOT decompile files automatically with iasl. (default: True)',
                                 action = 'store_true')
         # --------------
 
@@ -435,6 +441,19 @@ class dumpACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
             else:
                 debug.error("Could not find RSDP in [0x{0:08x}, 0x{1:08x}]".format(start, start+length))
             #end if
+        else:
+            if(self._config.NO_IASL == False):
+                #check iasl is installed
+                if(find_executable("iasl") != None):
+                    debug.debug("calling iasl")
+                    #call iasl
+                    #e.g.: iasl -d ./dumpedTables/0x*/*.aml
+                    subprocess.call(["iasl", "-d", self._config.PATH+"/0x*/*aml"],
+                                    stdout=sys.stdout,
+                                    stderr=sys.stderr)
+                else:
+                    debug.error("iasl not found. Please install 'acpica-tools'.")
+                #end if
         #end if
 
     #----------------------- end def -----------------------

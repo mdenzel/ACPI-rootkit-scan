@@ -3,12 +3,13 @@
 
 ------------------------------------------------
 1. Installation
-2. Usage
- 2.1 dumpACPITables.py
- 2.2 scanACPITables.py
-3. Remarks
- 3.1 iasl
- 3.2 ACPIstructs.py
+2. Quickstart
+3. Usage
+ 3.1 dumpACPITables.py
+ 3.2 scanACPITables.py
+4. Remarks
+ 4.1 iasl
+ 4.2 ACPIstructs.py
 
 ------------------------------------------------
 1. Installation
@@ -22,9 +23,22 @@ to the plugin-folder of volatility (.../volatility/plugins).
 Both plugins (dumpACPITables.py and scanACPITables.py) can be installed and run
 individually and just require the header-file ACPIstructs.py
 
+Alternatively, one can include '--plugins=.../ACPI-rootkit-scan' in the volatility command.
+
 ------------------------------------------------
-2. Usage
-2.1 dumpACPITables.py
+2. Quickstart
+
+Simply execute:
+
+`volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump`
+
+The option 'dump' calls both modules with default option, i.e. it dumps the ACPI tables into the default
+folder, decompiles them with iasl, and scans the result for ACPI rootkits.
+
+
+------------------------------------------------
+3. Usage
+3.1 dumpACPITables.py
 
 The plugin is able to extract the ACPI tables from a memory dump in raw and
 aml format (for description of the parameters see "-h" option in volatility).
@@ -57,7 +71,7 @@ $ tree ./dumpedTables
   `-- WAET.raw
 
 ------------------------------------------------
-2.2 scanACPITables.py
+3.2 scanACPITables.py
 
 This plugin scans all .dsl (ACPI Source Language, ASL) files in a given path
 for possible malicious function calls. To alter the path to search for
@@ -142,11 +156,11 @@ WARNING : volatility.plugins.scanACPITables: 		      function-address 'MBAS (Arg
 0x000f6b80/DSDT.dsl   OperationRegion (LPCS, SystemMemory, ECFG, 0x0500)                     seems ok
 
 ------------------------------------------------
-3. Remarks
-3.1 iasl
+4. Remarks
+4.1 iasl
 
 The aml-files can be decompiled into .dsl files with iasl, an official tool from ACPICA
-(could be found in the Fedora/Ubuntu repositories - date 2013-10-11):
+(could be found in the Fedora/Ubuntu repositories as 'acpica-tools' - date 2020-05-02):
 
 $ iasl -d <file.aml>
 e.g.
@@ -156,7 +170,7 @@ The resulting <file.dsl> can be opened with a normal text-editor or scanned with
 the second plugin scanACPITables.py
 
 ------------------------------------------------
-3.2 ACPIstructs.py
+4.2 ACPIstructs.py
 
 This file includes ACPI header structs to parse the ACPI tables.
 It can not be run separately but could be included in further modules which

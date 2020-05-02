@@ -22,6 +22,7 @@ from binascii import unhexlify
 from math import ceil
 from math import floor
 #own modules
+import volatility.plugins.dumpACPITables as dumpACPITables
 import ACPIstructs
 
 # ----- parser class to convert address-expressions into absolute values -----
@@ -371,18 +372,17 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
                                 help = 'Path to folder with dumped ACPI tables ' + 
                                 '(= folder containing the 0x123abcde/ folders). ',
                                 action = 'store', type = 'str')
-        self._config.add_option('OUTPUTLENGTH', short_option = 'o', default = '70',
+        self._config.add_option('OUTPUTLENGTH', default = '70',
                                 help = 'The length of the output for table colum "function"',
                                 action = 'store', type = 'str')
         self._config.add_option('EXPERIMENTAL', short_option = 'x', default = False,
                                 help = 'Scan for a wider range of potential suspicious functions. ' +
                                 'This might result in much more false-positives!',
                                 action = 'store_true')
+        self._config.add_option('DUMP', default = False,
+                                help = 'Call plugin dumpACPITables (with default values, i.e. including iasl) before scanning.',
+                                action = 'store_true')
         # --------------
-
-        #check if "path" exists
-        if(not os.path.isdir(self._config.PATH)):
-            debug.error("path {0} does not exist".format(self.PATH))
 
         #variables
         self.kernel_address_space = None
@@ -528,6 +528,11 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
 
     #calculate function to do the whole work
     def calculate(self):
+        #check if "path" exists
+        if(not self._config.DUMP and not os.path.isdir(self._config.PATH)):
+            debug.error("path {0} does not exist".format(self.PATH))
+        #end if
+        
         #load kernel space (= virtual address space) to check suspicious addresses against kernel
         self.kernel_address_space = utils.load_as(self._config)
         if(not self.is_valid_profile(self.kernel_address_space.profile)):
@@ -540,6 +545,11 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
             debug.error("Unsupported profile: {0}".format(
                     self.physical_address_space.profile.metadata.get('os', 'unknown')))
 
+        #call dumpACPITables if requested
+        if(self._config.DUMP):
+            dumpACPITables.dumpACPITables(self._config).calculate()
+        #end if
+        
         #init
         self.parser = Parser(self.physical_address_space)
 
