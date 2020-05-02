@@ -342,7 +342,7 @@ class Parser:
                     debug.error("Can not parse function: Add with params: {0} and {1}".format(param1, param2))
             else:
                 #unknown complex expressions or variables are fishy
-                debug.warning("function-address '{0}' can not be evaluated".format(addr))
+                debug.debug("function-address '{0}' can not be evaluated".format(addr))
                 return "suspicious"
             #endif
         #endif
@@ -378,6 +378,9 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
         self._config.add_option('EXPERIMENTAL', short_option = 'x', default = False,
                                 help = 'Scan for a wider range of potential suspicious functions. ' +
                                 'This might result in much more false-positives!',
+                                action = 'store_true')
+        self._config.add_option('ONLY_CRIT', default = False,
+                                help = 'Only show certain detections ("critical" ones).',
                                 action = 'store_true')
         self._config.add_option('DUMP', default = False,
                                 help = 'Call plugin dumpACPITables (with default values, i.e. including iasl) before scanning.',
@@ -606,8 +609,10 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
                             #yield all lines that are not "postrun"
                             #these can (in not broken dsl files)
                             #later be evaluated
-                            if(check != "postrun"): #TODO: only critical?
-                                yield statistic[index]
+                            if(check != "postrun"):
+                                if(self._config.ONLY_CRIT == False or check == "CRITICAL"):
+                                    yield statistic[index]
+                                #end if
                             #end if
 
                             #next
@@ -628,7 +633,9 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
                             #end if
                             #new value => yield it
                             if(s[2] != "nofunc"):
-                                yield s
+                                if(self._config.ONLY_CRIT == False or check == "CRITICAL"):
+                                    yield s
+                                #end if
                             #end if
                         #end if
                     #end for

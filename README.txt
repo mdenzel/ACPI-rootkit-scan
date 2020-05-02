@@ -35,6 +35,9 @@ Simply execute:
 The option 'dump' calls both modules with default option, i.e. it dumps the ACPI tables into the default
 folder, decompiles them with iasl, and scans the result for ACPI rootkits.
 
+If you only want to see certain detections, run:
+
+`volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump --only_crit`
 
 ------------------------------------------------
 3. Usage
