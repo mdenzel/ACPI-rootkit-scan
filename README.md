@@ -50,16 +50,16 @@ to the plugin-folder of volatility (.../volatility/plugins).
 
 # 2. Quickstart
 
-[LiME](https://github.com/504ensicsLabs/LiME) (or similar) is suited to create memory dumps of Linux systems.
+[LiME](https://github.com/504ensicsLabs/LiME) (or similar) is suited to create memory dumps of Linux systems. Remark: use `format=padded` or `format=lime` with `timeout=0` to create memory dumps that work with volatility.
 
-Once you acquired a memory dump, simply execute:
+Once you acquired a memory dump, execute the following:
 
 ```volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump```
 
 The option 'dump' calls both modules with default option, i.e. it dumps the ACPI tables into the default
 folder, decompiles them with iasl, and scans the result for ACPI rootkits.
 
-If you only want to see certain detections, run:
+If you only want to see detections, run:
 
 ```volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump --only_crit```
 
