@@ -37,7 +37,9 @@ Alternatively, one can include `--plugins=.../ACPI-rootkit-scan` in the volatili
 
 # 2. Quickstart
 
-Simply execute:
+[LiME](https://github.com/504ensicsLabs/LiME) (or similar) is suited to create memory dumps of Linux systems.
+
+Once you acquired a memory dump, simply execute:
 
 ```volatility --plugins=/path/to/ACPI-rootkit-scan --profile=xxx -f /path/to/dump.dd scanacpitables --dump```
 
