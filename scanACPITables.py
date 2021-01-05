@@ -533,7 +533,7 @@ class scanACPITables(common.AbstractWindowsCommand, linux_common.AbstractLinuxCo
     def calculate(self):
         #check if "path" exists
         if(not self._config.DUMP and not os.path.isdir(self._config.PATH)):
-            debug.error("path {0} does not exist".format(self.PATH))
+            debug.error("path {0} does not exist".format(self._config.PATH))
         #end if
         
         #load kernel space (= virtual address space) to check suspicious addresses against kernel

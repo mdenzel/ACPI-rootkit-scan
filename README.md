@@ -3,10 +3,14 @@
 @license:	GNU General Public License 2.0 or later
 ```
 
+This repository includes a volatility plugin to search for ACPI rootkits.
+
 ------------------------------------------------
 
 ```
 1. Installation
+ 1.1 Quick Installation
+ 1.2 Full Installation
 2. Quickstart
 3. Usage
  3.1 dumpACPITables.py
@@ -20,18 +24,27 @@
 
 # 1. Installation
 
-Just copy the three files
+Requirements:
+
+- (a memory dump tool (e.g. `LiME` for Linux) to create a memory dump)
+- python2
+- volatility with distorm3 and pycrypto (distorm3 and pycrypto can be installed via `pip2 install xxx`)
+- the tool `iasl` is needed to decompile ACPI tables, it is part of the `acpica-tools` package in Linux
+- ACPI-rootkit-scan (this repository)
+
+## 1.1 Quick installation
+
+Clone this repository and include `--plugins=.../path/to/ACPI-rootkit-scan` in the volatility command.
+
+## 1.2 Full installation
+
+Copy the three files
 
 - ACPIstructs.py ("header" file)
 - dumpACPITables.py
 - scanACPITables.py
 
 to the plugin-folder of volatility (.../volatility/plugins).
-
-Both plugins (dumpACPITables.py and scanACPITables.py) can be installed and run
-individually and just require the header-file ACPIstructs.py
-
-Alternatively, one can include `--plugins=.../ACPI-rootkit-scan` in the volatility command.
 
 ------------------------------------------------
 
