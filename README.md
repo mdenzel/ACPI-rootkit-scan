@@ -3,7 +3,7 @@
 @license:	GNU General Public License 2.0 or later
 ```
 
-This repository includes a volatility plugin to search for ACPI rootkits.
+This repository includes a [volatility2](https://github.com/volatilityfoundation/volatility) plugin to search for ACPI rootkits.
 
 ------------------------------------------------
 
